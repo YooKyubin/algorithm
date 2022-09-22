@@ -1,7 +1,10 @@
 #특정한 최단 경로
+
 import sys
 from collections import deque
 
+#https://www.acmicpc.net/board/view/85172 INF 설정하는 방법
+INF = int(1e7)
 n, e = map(int, sys.stdin.readline().split())
 graph = [[] for _ in range(n+1)]
 for _ in range(e):
@@ -11,37 +14,47 @@ for _ in range(e):
 
 #경유지
 v1, v2 = map(int, sys.stdin.readline().split())
-def cal_dist(start, dp_n):
-    q = deque()
+
+# 끊긴 경로가 없는지 검사
+def bfs():
     visited = [False] * (n+1)
-    q.append(start)
-    dp[dp_n][start] = 0
-    visited[start] = True
+    q = deque()
+    q.append(1)
+    visited[1] = True
     while q:
         v = q.popleft()
         for i, d in graph[v]:
             if not(visited[i]):
-                dp[dp_n][i] = min(dp[dp_n][i], dp[dp_n][v] + d)
-        # visited가 False인 dp값이 가장 작은 연결된 노드, dp값의 인덱스
-        temp_distance = sys.maxsize
-        next_node = 0
-        new = False
+                q.append(i)
+                visited[i] = True
+
+    if visited[v1] and visited[v2] and visited[n]:
+        return True
+    else:
+        return False
+
+
+def dijkstra(start):
+    dist = [INF] * (n+1)
+    visited = [False] * (n+1)
+    dist[start] = 0
+    #visited[start] = True
+    
+    for _ in range(n):
+        v = min(list(range(1,n+1)), key = lambda x: dist[x] if not(visited[x]) else INF)
+        visited[v] = True
         for i, d in graph[v]:
-            if not(visited[i]):
-                if temp_distance > dp[dp_n][i]:
-                    new = True
-                    next_node = i
-                    temp_distance = dp[dp_n][i]
-        if new:          
-            q.append(next_node)
-            visited[v] = True
+            dist[i] = min(dist[i], dist[v] + d)
+    
+    return dist
+
 
 # 1 -> v1, v1 -> v2, v2 -> n
 # 1 -> v2, v2 -> v1, v1 -> n
-dp = [[sys.maxsize] * (n+1) for _ in range(3)]
-
-cal_dist(1, 0)
-cal_dist(v1, 1)
-cal_dist(v2, 2)
-
-print(min(dp[0][v1] + dp[1][v2] + dp[2][n], dp[0][v2] + dp[2][v1] + dp[1][n]))
+if bfs():
+    dist_1 = dijkstra(1)
+    dist_v1 =  dijkstra(v1)
+    dist_v2 = dijkstra(v2)
+    print(min(dist_1[v1] + dist_v1[v2] + dist_v2[n], dist_1[v2] + dist_v2[v1] + dist_v1[n]))
+else:
+    print(-1)
