@@ -3,6 +3,7 @@
 using namespace std;
 
 int k;
+// dx[0], y[0] 을 만들기 위해 길이를 7로 하였다.
 int dx[7] = {0};
 int y[7] = {0};
 int direct[5][2] = {
