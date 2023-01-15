@@ -1,64 +1,56 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <queue>
 #include <map>
 #include <set>
 
 using namespace std;
 
+vector<pair<int,int>> dir {{0,1}, {1,1}, {1,0}, {1,-1}, {0,-1}, {-1,-1}, {-1,0}, {-1,1}};
+
+void dfs(pair<int,int> v, int depth, 
+    map< pair<int,int>, set<int> >& graph, map< pair<int,int>, int >& visited, int& answer) {
+        
+    visited[v] = depth;
+
+    for (auto i: graph[v]) {
+        pair<int,int> newPos = { v.first + dir[i].first, v.second + dir[i].second };
+        if (visited[newPos] == 0) {
+            dfs(newPos, depth+1, graph, visited, answer);
+        }
+        else if (depth - visited[newPos] > 1) {
+            answer += 1;
+        }
+    }
+    
+    
+}
+
 int solution(vector<int> arrows) {
     int answer = 0;
-    vector<pair<int,int>> dir {{0,1}, {1,1}, {1,0}, {1,-1}, {0,-1}, {-1,-1}, {-1,0}, {-1,1}};
-    map< pair<int,int>, set<pair<int,int>> > graph;
-    map<pair<int,int>, bool> visited;
+    map< pair<int,int>, set<int> > graph;
+    map< pair<int,int>, int > visited;
 
-    pair<int,int> pos {0,0};
-    for (auto i: arrows){
-        for (int j = 1; j <= 2; j++) {
-
-            visited[pos] = false;
+    pair<int, int> pos {0,0};
+    for (auto i: arrows) {
+        for (int j=0; j < 2; j++){
+            graph[pos].insert(i);
+            visited[pos] = 0;
             int x = pos.first + dir[i].first;
             int y = pos.second + dir[i].second;
-
-            graph[pos].insert({x, y});
-            graph[{x,y}].insert(pos);
-            pos = {x,y};
-            // cout << "dir: " << i  << ": " << x << ", " << y << endl;
+            pos = { x,y };
+            graph[pos].insert( (i+4) % 8);
         }
     }
-    for (auto i: graph[{0,0}]){
-        cout << i.first << ", " << i.second << "/ ";
-    }
-    cout << endl;
 
-    /*
-    이걸 dfs로 구현했다면 훨씬 깔끔한 코드가 나올 것 같다.
-    depth 를 저장해두고 두 노드의 depth 차이가 1이 아니라면 바로 이전 노드가 아니라는 뜻이 된다.
-    괜히 이거처럼 이전 노드를 따로 저장해서 지저분하게 생길 필요가 없을 것 같다.
-    */
-    queue< pair<pair<int,int>, pair<int,int>> > q;
-    q.push({ {0,0}, {0,0} });
-    while(!q.empty()){
-        pair<int,int> v = q.front().first;
-        pair<int,int> pre = q.front().second;
-        visited[v] = true;
-        q.pop();
+    // for (auto i: graph[{-2,0}]) {
+    //     cout << i << endl;
+    // }
 
-        for (pair<int,int> i: graph[v]) {
-            if (!visited[i]) {
-                visited[i] = true;
-                q.push({ i, v });
-            }
-            else if (pre != i) {
-                cout << "v : " << v.first << ", " << v.second << endl;
-                cout << "i : " << i.first << ", " << i.second << endl;
-                cout << endl;
-                answer += 1;
-            }
-        }
-    }
-    return answer/2;
+    dfs( {0,0}, 1, graph, visited, answer );
+
+
+    return answer;
 }
 
 int main() {
@@ -78,4 +70,5 @@ int main() {
 
 /*
 양방향 : { (arrows % 4), (arrows % 4 + 4) }
+양방향 : { (arrows), ((arrows + 4) % 8) }
 */
