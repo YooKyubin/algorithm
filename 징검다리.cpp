@@ -40,20 +40,22 @@ int solution(int distance, vector<int> rocks, int n) {
 
     while (left < right) {
         int mid = (left + right) / 2;
-
-        if (check(n, rocks, mid)){
+    
+        // 범위가 어디서 어떻게 줄어드는지, n과 remove가 같은 값일 때 어디서 어떻게 줄어드는지 생각
+        if (check(n, rocks, mid)){ // 같다가 포함되는 범위에 answer 를 갱신한다.
             answer = mid;
             left = mid+1; // 항상 작은 값을 올려쳐야 while 문이 종료되는건가?
+            // rigth = mid 를 하는건 어짜피 뭘해도 기존 right 보다 작은 값이 저장됨
         }
         else {
             right = mid;
         }
     }
-    // cout << "start" << endl;
-    // for (int i=0; i < distance; i++){
-    //     check(3, rocks, i);
-    // }
-    // cout << endl;
+    cout << "start" << endl;
+    for (int i=0; i < distance; i++){
+        check(3, rocks, i);
+    }
+    cout << endl;
 
     return answer;
 }
