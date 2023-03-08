@@ -31,9 +31,8 @@ queue<int> getCardSequence(int target, int numberOfCards){
     return ret;
 }
 
-int dfs(int v, vector<node>& nodes, vector<int>& result){
+int dfs(int v, vector<node>& nodes){
     if (nodes[v].childNode.empty()){ // 리프노드 인 경우
-        result.push_back(v);
         nodes[v].numberOfCards++;
         std::cout << "leaf node: " << v << endl;
         return v;
@@ -42,7 +41,7 @@ int dfs(int v, vector<node>& nodes, vector<int>& result){
     nodes[v].childNode.pop();
     nodes[v].childNode.push(n);
 
-    return dfs(n, nodes, result);
+    return dfs(n, nodes);
 }
 
 vector<int> solution(vector<vector<int>> edges, vector<int> target) {
@@ -70,7 +69,8 @@ vector<int> solution(vector<vector<int>> edges, vector<int> target) {
     int cnt = 0;
     bool flag = true;
     while (flag){
-        int leafNode = dfs(1, nodes, result);
+        int leafNode = dfs(1, nodes);
+        result.push_back(leafNode);
         std::cout << "cnt: "<< ++cnt << endl;
 
         if (target[leafNode-1] < nodes[leafNode].numberOfCards){
