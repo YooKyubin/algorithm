@@ -1,20 +1,17 @@
+/*
+입력을 끝까지 받지 않고 사이클 완성되었을 때 break; 하면 훨씬 빨리 프로그램이 끝나긴함
+당연하지만 isInit같은 변수 안쓰고 그냥 전부다 초기화하면 변수 하나가 줄어서 그런지 메모리도 더 적었음
+*/
 #include <iostream>
 
 using namespace std;
 
 struct Node {
-    bool isInit = false;
     int rank;
     int root;
 };
 
 Node* nodes;
-
-void makeSet(int x){
-    nodes[x].isInit = true;
-    nodes[x].rank = 0;
-    nodes[x].root = x;
-}
 
 int findSet(int x){
     if (x == nodes[x].root){
@@ -49,24 +46,21 @@ int main(){
 
     int n, m;
     int answer = 0;
-    bool flag = false;
 
     cin >> n >> m;
     nodes = (Node*)malloc(sizeof(Node) * n);
+    for (int i =0; i<n; i++){
+        nodes[i].rank = 0;
+        nodes[i].root = i;
+    }
+
     for (int i=0; i < m; i++){
         int v1, v2;
         cin >> v1 >> v2;
         
-        // printf("v1: %d, v2: %d\n", nodes[v1].isInit, nodes[v2].isInit);
-        
-        if (flag) continue;
-
-        if (!nodes[v1].isInit) makeSet(v1);
-        if (!nodes[v2].isInit) makeSet(v2);
-
+        // isCycle
         if (findSet(v1) == findSet(v2)){
             answer = i + 1;
-            flag = true;
         }
         
         unionSet(v1, v2);
