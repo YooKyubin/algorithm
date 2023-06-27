@@ -43,11 +43,13 @@ int main() {
         }
     }
 
+    // 굳이 필요 없는 변수들이 있지만 이해를 위해서 굳이 굳이 이름을 달리해가며 변수로 저장했다
     int64_t curTime = lo;
     int64_t targetTime = curTime - 1;
     int64_t curChild = countChild(targetTime);
+    int64_t remainedChild = n - curChild;
     for (int i=0; i<times.size(); i++){
-        if ((targetTime) % times[i] == 0 && ++curChild == n){
+        if (targetTime % times[i] == 0 && --remainedChild == 0){
             cout << i+1 << endl;
             break;
         }
@@ -59,8 +61,4 @@ int main() {
 /*
 x축 : 시간
 y축 : 사람 수
-
-어떤 특정 시간에 사람의 수가 n보다 작거나 같다면: 사람 수 <= n : 중 최대값
-n보다 작거나 같을 수 있는 시간중 최대값에서의 사람 수와 실제 총 사람의 수를 비교하여 그 차이만큼 
-그 시간에 남는 놀이 기구에 넣는다.
 */
