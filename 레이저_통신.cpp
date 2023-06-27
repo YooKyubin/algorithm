@@ -22,7 +22,6 @@ struct Pos{
 vector<Pos> dir { {0,1}, {1,0}, {-1, 0}, {0, -1} };
 
 int w, h;
-vector<vector<bool>> visited;
 vector<vector<int>> dist;
 vector<vector<bool>> isWall;
 
@@ -34,7 +33,6 @@ void bfs(Pos start){
     queue<Pos> q;
     q.push(start);
     dist[start.x][start.y] = 0;
-    visited[start.x][start.y] = true;
 
     while (!q.empty()){
         Pos cur = q.front();
@@ -48,13 +46,6 @@ void bfs(Pos start){
                     dist[next.x][next.y] = dist[cur.x][cur.y]+1;
                     q.push(next);
                 }
-                // else if (dist[next.x][next.y] == dist[cur.x][cur.y]){
-                    
-                // }
-                // else if (dist[next.x][next.y] < dist[cur.x][cur.y]){
-                // }
-
-
                 next = next + d;
             }
         }
@@ -67,7 +58,6 @@ int main () {
 
     cin >> w >> h;
     vector<Pos> CPos;
-    visited = vector<vector<bool>> (h, vector<bool>(w, false));
     dist = vector<vector<int>> (h, vector<int>(w, w*h+1));
     isWall = vector<vector<bool>> (h, vector<bool>(w, false));
     for (int i=0; i<h; i++){
