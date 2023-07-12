@@ -24,7 +24,7 @@ struct Pos {
 
 int n, m;
 vector<string> board;
-vector<int> visited(26, 0);
+vector<bool> visited(26, false);
 int answer = 0;
 
 vector<Pos> dir = { {0, 1}, {1, 0}, {-1, 0}, {0, -1} };
@@ -34,19 +34,17 @@ bool OOB(Pos input){
 }
 
 void dfs(Pos cur, int depth){
-    int curVal = board[cur.x][cur.y] - 'A';
-    // visited[(int)curVal] = true;
     answer = max(answer, depth);
     
     for (Pos d : dir){
         Pos next = cur + d;
         if ( OOB(next) ) continue;
         int nextVal = board[next.x][next.y] - 'A';
-        if ( visited[(int)nextVal] != 0 ) continue;
+        if ( visited[(int)nextVal] ) continue;
 
-        visited[nextVal]++;
+        visited[nextVal] = true;
         dfs(next, depth+1);
-        visited[nextVal]--;
+        visited[nextVal] = false;
     }
 }
 
@@ -62,7 +60,7 @@ int main() {
     }
 
     Pos start = {0, 0};
-    visited[board[start.x][start.y]- 'A'] += 1;
+    visited[board[start.x][start.y]- 'A'] = true;
     dfs(start, 1);
     
     cout << answer << endl;
