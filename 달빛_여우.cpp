@@ -7,7 +7,7 @@ using namespace std;
 struct Node
 {
     int to;
-    int64_t weight;
+    int weight;
     bool isDouble;
 
     bool operator>(Node input)
@@ -28,22 +28,22 @@ struct cmp
 int n, m;
 vector<vector<Node>> graph[3];
 
-int64_t min(int64_t a, int64_t b)
+int min(int a, int b)
 {
     return a < b ? a : b;
 }
 
-vector<int64_t> dijkstra(int start)
+vector<int> dijkstra(int start)
 {
     priority_queue<Node, vector<Node>, cmp<Node>> pq;
-    vector<int64_t> dist(n+1, INT64_MAX);
+    vector<int> dist(n+1, INT32_MAX);
     pq.push({start, 0});
     dist[start] = 0;
     
     while (!pq.empty())
     {
         int cur = pq.top().to;
-        int64_t curWeight = pq.top().weight;
+        int curWeight = pq.top().weight;
         pq.pop();
 
         if (curWeight > dist[cur])
@@ -52,7 +52,7 @@ vector<int64_t> dijkstra(int start)
         for (auto n : graph[1][cur])
         {
             int next = n.to;
-            int64_t nextWeight = curWeight + n.weight;
+            int nextWeight = curWeight + n.weight;
 
             if (nextWeight >= dist[next])
                 continue;
@@ -65,19 +65,19 @@ vector<int64_t> dijkstra(int start)
     return dist;
 }
 
-vector<vector<int64_t>> dijkstra2(int start)
+vector<vector<int>> dijkstra2(int start)
 {
     priority_queue<Node, vector<Node>, cmp<Node>> pq;
-    vector<vector<int64_t>> dist(2);
-    dist[0] = vector<int64_t>(n+1, INT64_MAX);
-    dist[1] = vector<int64_t>(n+1, INT64_MAX);
+    vector<vector<int>> dist(2);
+    dist[0] = vector<int>(n+1, INT32_MAX);
+    dist[1] = vector<int>(n+1, INT32_MAX);
     pq.push({start, 0, true});
     dist[true][1] = 0;
     
     while (!pq.empty())
     {
         int cur = pq.top().to;
-        int64_t curWeight = pq.top().weight;
+        int curWeight = pq.top().weight;
         bool curIsDouble = pq.top().isDouble;
         pq.pop();
         
@@ -87,7 +87,7 @@ vector<vector<int64_t>> dijkstra2(int start)
         for (auto n : graph[!curIsDouble * 2][cur])
         {
             int next = n.to;
-            int64_t nextWeight = curWeight + n.weight;
+            int nextWeight = curWeight + n.weight;
 
             if (nextWeight >= dist[!curIsDouble][next])
                 continue;
@@ -112,7 +112,7 @@ int main ()
     while (m--)
     {
         int a, b;
-        int64_t weight;
+        int weight;
         cin >> a >> b >> weight;
         for (int i=0; i<3; ++i)
         {
@@ -121,8 +121,8 @@ int main ()
         }
     }
 
-    vector<int64_t> foxDist = dijkstra(1);
-    vector<vector<int64_t>> wolfDist = dijkstra2(1);
+    vector<int> foxDist = dijkstra(1);
+    vector<vector<int>> wolfDist = dijkstra2(1);
     
     int cnt = 0;
     for (int i=1; i<n+1; ++i)
