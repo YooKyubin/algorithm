@@ -4,7 +4,6 @@
 using namespace std;
 
 vector<int> head;
-vector<bool> docked;
 
 int find(int x)
 {
@@ -22,8 +21,10 @@ void merge(int x, int y)
     if (x == y)
         return;
 
-    if (x > y)
+    if (x > y) // 문제의 조건때문에 작은놈이 항상 root 
         head[x] = y;
+    else
+        head[y] = x;
 }
 
 int main()
@@ -35,7 +36,6 @@ int main()
     cin >> g;
     cin >> p;
 
-    docked.assign(g+1, false);
     head.resize(g+1);
     for (int i=0; i<g+1; ++i)
         head[i] = i;
@@ -48,18 +48,14 @@ int main()
         cin >> gi;
 
         int ptr = find(gi);
-        while (docked[ptr] && ptr > 0)
+        if (ptr > 0)
         {
-            --ptr;
-            merge(gi, ptr);
+            ++cnt;
+            merge(ptr, ptr-1);
         }
-
-        if (ptr == 0)
+        else
             break;
-        
-        docked[ptr] = true;
 
-        ++cnt;
     }
 
     cout << cnt << endl;
