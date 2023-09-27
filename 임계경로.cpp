@@ -13,14 +13,14 @@ struct Node
 
 int n, m;
 vector<vector<pair<int ,int>>> graph;
-vector<vector<pair<int, int>>> re_graph;
 vector<int> indegree;
-vector<int> re_indegree;
+
 int start, arrival;
 int maxDist = 0;
 
 vector<int> forwardDist;
-vector<int> reverseDist;
+
+vector<vector<int>> parent;
 
 int max(int a, int b) { return a > b ? a : b; }
 
@@ -38,9 +38,19 @@ void topologySort()
         for (auto edge : graph[cur])
         {
             int next = edge.first;
-            int nextDist = edge.second;
+            int nextDist = edge.second + curDist;
 
-            forwardDist[next] = max(forwardDist[next], curDist + nextDist);
+            // forwardDist[next] = max(forwardDist[next], nextDist);
+            if (forwardDist[next] < nextDist)
+            {
+                forwardDist[next] = nextDist;
+                parent[next].clear();
+            }
+            if (forwardDist[next] <= nextDist)
+            {
+                parent[next].push_back(cur);
+
+            }
             --indegree[next];
             if (indegree[next] == 0)
                 q.push({next, forwardDist[next]});
@@ -51,33 +61,25 @@ void topologySort()
 
 int findCritical()
 {
-    queue<Node> q;
-    q.push({arrival, 0});
+    queue<int> q;
+    q.push({arrival});
     vector<bool> visited(n+1, false);
     int cnt = 0;
     
     while(!q.empty())
     {
-        int cur = q.front().num;
-        int curDist = q.front().dist;
+        int cur = q.front();
         q.pop();
 
-        for (auto edge : re_graph[cur])
+        for (auto next : parent[cur])
         {
-            int next = edge.first;
-            int nextDist = edge.second + curDist;
-            
-            if (forwardDist[next] + nextDist == maxDist)
-            {
-                ++cnt;
-                // cout << cur << "->" << next << endl;
-                if(visited[next])
-                    continue;
-                
-                visited[next] = true;
-                q.push({next, nextDist});
-            }
+            ++cnt;
+            if (visited[next])
+                continue;
 
+            // cout << cur << " -> " << next << endl;
+            visited[next] = true;
+            q.push(next);
         }
     }
 
@@ -93,13 +95,10 @@ int main()
     cin >> m;
 
     graph.resize(n+1);
-    re_graph.resize(n+1);
-
     indegree.resize(n+1, 0);
-    re_indegree.resize(n+1, 0);
-
     forwardDist.resize(n+1, 0);
-    reverseDist.resize(n+1, 0);
+
+    parent.resize(n+1);
 
     for (int i=0; i<m; ++i)
     {
@@ -107,15 +106,20 @@ int main()
         cin >> dest >> to >> dist;
         graph[dest].push_back({to, dist});
         ++indegree[to];
-
-        re_graph[to].push_back({dest, dist});
-        ++re_indegree[dest];
-
     }
     cin >> start >> arrival;
 
     topologySort();
     maxDist = forwardDist[arrival];
+    // for (int i=1; i<n+1; i++)
+    // {
+    //     cout << i << " -> " ;
+    //     for (auto j : parent[i])
+    //     {
+    //         cout << j << " ";
+    //     }
+    //     cout << endl;
+    // }
     int criticalPath = findCritical();
 
     cout << maxDist << endl;
