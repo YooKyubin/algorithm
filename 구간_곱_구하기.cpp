@@ -10,19 +10,19 @@ int n, m, k;
 int height;
 int treeSize;
 vector<uint64_t> arr;
-vector<uint64_t> tree;
+vector<int> tree;
 
-uint64_t init(int idx, int start, int end)
+int init(int idx, int start, int end)
 {
     if (start == end)
         return tree[idx] = arr[start];
     
     int mid = (start + end) / 2;
-    tree[idx] = init(idx*2 + 1, start, mid) * init(idx*2 + 2, mid + 1, end) % MOD;
+    tree[idx] = (uint64_t)init(idx*2 + 1, start, mid) * init(idx*2 + 2, mid + 1, end) % MOD;
     return tree[idx] ;
 }
 
-uint64_t getMul(pair<int, int> range, int idx, int start, int end)
+int getMul(pair<int, int> range, int idx, int start, int end)
 {
     if (end < range.first || range.second < start)
         return 1;
@@ -31,10 +31,10 @@ uint64_t getMul(pair<int, int> range, int idx, int start, int end)
         return tree[idx];
     
     int mid = (start + end) / 2;
-    return getMul(range, idx*2 + 1, start, mid) * getMul(range, idx*2 + 2, mid+1, end) % MOD;
+    return (uint64_t)getMul(range, idx*2 + 1, start, mid) * getMul(range, idx*2 + 2, mid+1, end) % MOD;
 }
 
-uint64_t update(int num, int target, int idx, int start, int end)
+int update(int num, int target, int idx, int start, int end)
 {
     // if (start == end && target == start)
     //     return tree[idx] = num;
@@ -46,7 +46,7 @@ uint64_t update(int num, int target, int idx, int start, int end)
         return tree[idx] = num;
 
     int mid = (start + end) / 2;
-    return tree[idx] = update(num, target, idx*2 + 1, start, mid) * update(num, target, idx*2 + 2, mid+1, end) % MOD;
+    return tree[idx] = (uint64_t)update(num, target, idx*2 + 1, start, mid) * update(num, target, idx*2 + 2, mid+1, end) % MOD;
 }
 
 int main()
