@@ -23,9 +23,6 @@ int TSP(int cur, int visited)
     int ret = INF;
     for (int i=0; i<n; ++i)
     {
-        if (i == start)
-            continue;
-
         if (weights[cur][i] == 0)
             continue;
 
@@ -54,7 +51,6 @@ int main()
     }
 
     cout << TSP(start, 1 << start) << endl;
-
 
     return 0;
 }
