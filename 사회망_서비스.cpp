@@ -1,13 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+
 using namespace std;
+
+struct Person{
+    int early = 1;
+    int normal = 0;
+};
 
 vector<vector<int>> sns;
 vector<int> memo_true;
 vector<int> memo_false;
 vector<bool> visited;
 vector<vector<int>> directional;
+vector<vector<int>> tree;
+vector<Person> SNS;
 
 void make_dir(int x){
     visited[x] = true;

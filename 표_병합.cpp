@@ -171,10 +171,3 @@ int main() {
     }
     return 0;
 }
-
-/*
-망했다 
-UPDATE r cvalue 
-UPDATE value1 value2
-이거 두 개 어떻게 구분하지?
-*/

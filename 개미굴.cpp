@@ -26,24 +26,24 @@ struct Node
 
         this->child[arr[depth]].insert(depth + 1, arr);
     }
+
+    void find(int depth)
+    {
+        if (this->isFinish)
+            return;
+
+        for (auto& next : this->child)
+        {
+            for (int i=0; i<depth; ++i)
+                cout << "--";
+            cout << next.first << "\n";
+            next.second.find(depth+1);
+        }
+    }
 };
 
 int n;
 Node root;
-
-void dfs(Node& cur, int depth)
-{
-    if (cur.isFinish)
-        return;
-
-    for (auto& next : cur.child)
-    {
-        for (int i=0; i<depth; ++i)
-            cout << "--";
-        cout << next.first << "\n";
-        dfs(next.second, depth + 1);
-    }
-}
 
 int main()
 {
@@ -65,8 +65,8 @@ int main()
 
         root.insert(0, inputs);
     }
-
-    dfs(root, 0);
+    
+    root.find(0);
 
     return 0;
 }

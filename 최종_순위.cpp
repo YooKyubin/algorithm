@@ -35,16 +35,16 @@ void swapEdge(int a, int b){
 }
 
 void dfs(int v, vector<int>& new_ranking){
-    indegree[v] -= 1;
+    // indegree[v] -= 1;
+    cout << "call " << v << endl;
     new_ranking.push_back(v);
 
-    for (int i=1; i < edges[v].size(); i++){
-        if (edges[v][i]){
-            indegree[i] -= 1;
+    for (int i=1; i < n+1; i++){
+        if (!edges[v][i]) continue;
 
-            if (indegree[i] == 0){
-                dfs(i, new_ranking);
-            }
+        if (--indegree[i] == 0) {
+            cout << "call chlid " << i << endl; 
+            dfs(i, new_ranking);
         }
     }
 }
@@ -79,6 +79,10 @@ int main(){
                 indegree[loser]++;
             }
         }
+
+        for (int i=1; i < n+1; i++){
+            cout << "indegree: " << indegree[i] << endl;
+        }
         
         cin >> m;
         for (int i=0; i<m; i++){
@@ -86,17 +90,24 @@ int main(){
             cin >> a >> b;
             swapEdge(a, b);
         }
+
+        for (int i=0; i<n+1; i++){
+            for (int j=0; j <n+1; j++){
+                cout << edges[i][j] << " ";
+            }cout << endl;
+        }
         
         // 위상정렬 순회
-        for (int i=1; i<indegree.size(); i++){
+        for (int i=1; i<n+1; i++){
             if (indegree[i] == 0){
                 dfs(i, new_ranking);
+                break; // 이걸 안했더니 dfs 한번 쭉 돌고 나서 for 문이 돌게 될때 그때 indegree가 0인 놈을 호출해버림
             }
         }
         
         // 사이클 검사 (데이터의 일관성 검사)
         bool isCycle = false;
-        for (int i=1; i<indegree.size(); i++){
+        for (int i=1; i<n+1; i++){
             // dfs 를 돌고 난 뒤에 indegree의 값이 0 이상인 노드가 있다면 사이클이 발생해서 모든 노드를 순회하지 못한 것이다.
             if (indegree[i] > 0) {
                 isCycle = true;
@@ -113,11 +124,3 @@ int main(){
     }
     return 0;
 }
-
-/*
-"IMPOSSIBLE"은 사이클이 발생하냐 아니냐의 문제
-
-"?" 은 사이클은 없는데 순위를 못 만드는 경우, 이런 경우가 어디있어 없어
-
-한번 싹 훑었는데 모든 indegree가 0이 아니다? 제대로 작동을 못힌 것임: 사이클 
-*/

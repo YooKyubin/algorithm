@@ -70,5 +70,43 @@ int main() {
     for (auto i: solution(users, emoticons)) {
         cout << i << " ";
     } cout << endl;
+
+
+    cout << "----_---------" << endl;
+
+    vector<int> v1 = {0, 1, 2,3,4,5,6,7,8,9};
+    int* a = &v1[0];
+    int* b = &v1[1];
+    int* c = &v1[2];
+    int* d = &v1[3];
+    vector<int> v2;
+    cout << &v1[0] << endl;
+    cout << &v1 << endl;
+    cout << a << endl;
+    cout << b << endl;
+    cout << c << endl;
+    cout << d << endl;
+
+    cout << endl;
+    v2 = vector<int>(v1.begin()+2, v1.end()-4);
+    v1 = vector<int>(v1.begin()+2, v1.end());
+    // v1 = v2;
+    cout << &v1[0] << endl;
+    cout << &v1 << endl;
+
+    cout << *a << endl;
+    cout << *b << endl;
+    cout << *c << endl;
+    cout << *d << endl;
+    cout << v1[3] << endl;
+    free(a);
+    free(b);
+    free(c);
+    free(d);
+    cout << a << endl;
+    cout << b << endl;
+    cout << c << endl;
+    cout << d << endl;
+
     return 0;
 }

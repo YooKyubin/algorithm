@@ -78,7 +78,7 @@ int main()
     }
     else
     {
-        if (basedOn0 <= 0 && basedOn2 <= 0)
+        if (basedOn0 <= 0 && basedOn2 <= 0) // 한 선분의 끝이 다른 직선 위에 있는 경우도 포함(0인 경우)
             cout << 1 << endl;
         else
             cout << 0 << endl;

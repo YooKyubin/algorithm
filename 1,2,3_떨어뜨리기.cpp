@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
@@ -13,21 +14,55 @@ struct node {
     queue<int> orderOfCards;
 };
 
+// queue<int> getCardSequence(int target, int numberOfCards){
+//     queue<int> ret;
+
+//     // printf("target : %d, the number of cards: %d \n", target, numberOfCards);
+//     while(numberOfCards--){
+//         for (int number: vector({1,2,3})){
+//             if (target - number > numberOfCards * 3) continue;
+//             else if (target - number < numberOfCards) continue;
+
+//             ret.push(number);
+//             target -= number;
+//             break;
+//         }
+//     }
+
+//     return ret;
+// }
+
+unordered_map<int, unordered_map<int, queue<int>>> memo;
+
+// chat GPT의 최적화 코드
 queue<int> getCardSequence(int target, int numberOfCards){
+    if (memo[target].count(numberOfCards)) {
+        return memo[target][numberOfCards];
+    }
+
     queue<int> ret;
+    if (numberOfCards == 0) {
+        memo[target][numberOfCards] = ret;
+        return ret;
+    }
 
-    // printf("target : %d, the number of cards: %d \n", target, numberOfCards);
-    while(numberOfCards--){
-        for (int number: vector({1,2,3})){
-            if (target - number > numberOfCards * 3) continue;
-            else if (target - number < numberOfCards) continue;
+    for (int number: vector({1,2,3})){
+        if (target - number > numberOfCards * 3) continue;
+        else if (target - number < numberOfCards) continue;
 
+        queue<int> candidate = getCardSequence(target - number, numberOfCards - 1);
+        if (!candidate.empty() || numberOfCards == 1) {
             ret.push(number);
-            target -= number;
-            break;
+            while (!candidate.empty()) {
+                ret.push(candidate.front());
+                candidate.pop();
+            }
+            memo[target][numberOfCards] = ret;
+            return ret;
         }
     }
 
+    memo[target][numberOfCards] = ret;
     return ret;
 }
 

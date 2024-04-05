@@ -61,7 +61,6 @@ vector<int> solution(vector<int> fees, vector<string> records) {
                 state.Time = state.Time / fees[2];
             state.Fee += state.Time * fees[3];
         }
-
     }
     
     // map은 key를 기준으로 오름차순 정렬을 해준다.
