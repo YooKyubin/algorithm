@@ -1,3 +1,8 @@
+/*
+참고 
+https://www.acmicpc.net/board/view/50494
+*/
+
 #include <iostream>
 #include <vector>
 
