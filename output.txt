@@ -1,1 +1,25 @@
-3
+left: 0, mid: 0, right: 1
+leftFind: 2, rightFind: 3, mid1 : -1, mid2: 1
+
+left: 0, mid: 1, right: 2
+leftFind: 3, rightFind: 6, mid1 : -7, mid2: 9
+
+left: 3, mid: 3, right: 4
+leftFind: 1, rightFind: 3, mid1 : 2, mid2: -2
+
+left: 0, mid: 2, right: 4
+leftFind: 9, rightFind: 3, mid1 : -4, mid2: 10
+
+left: 5, mid: 5, right: 6
+leftFind: 1, rightFind: 2, mid1 : 3, mid2: -3
+
+left: 7, mid: 7, right: 8
+leftFind: 4, rightFind: 0, mid1 : -4, mid2: 4
+
+left: 5, mid: 6, right: 8
+leftFind: 3, rightFind: 4, mid1 : -1, mid2: 2
+
+left: 0, mid: 4, right: 8
+leftFind: 10, rightFind: 4, mid1 : 6, mid2: 8
+
+10
