@@ -86,3 +86,88 @@ int main()
 
     return 0;
 }
+
+
+// ---
+
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+struct Node
+{
+    Node(int _value)
+    : value(_value)
+    {}
+
+    Node(const Node& rhs) noexcept = default;
+    Node(Node&& rhs) noexcept = default;
+
+    int value;
+    Node* left{ nullptr };
+    Node* right{ nullptr };
+};
+
+void PushNode(vector<Node>& nodes, Node* curr, int value)
+{
+    Node*& next = (curr->value > value) ? curr->left : curr->right;
+    if (next == nullptr)
+    {
+        nodes.push_back(Node(value));
+        next = &nodes.back();
+    }
+    else
+    {
+        PushNode(nodes, next, value);
+    }
+}
+
+void PostOrder(Node* curr)
+{
+    if (curr == nullptr)
+    {
+        return;
+    }
+
+    PostOrder(curr->left);
+    PostOrder(curr->right);
+    cout << curr->value << "\n";
+}
+
+int main()
+{
+    freopen("input.txt", "r", stdin);
+
+    cin.tie(nullptr);
+    ios_base::sync_with_stdio(false);   
+
+    vector<int> preOrder;
+    while (true)
+    {
+        int num;
+        cin >> num;
+        if (cin.eof())
+        {
+            break;
+        }
+        preOrder.push_back(num);
+    }
+    int numNodes = (int)preOrder.size();
+
+    vector<Node> nodes;
+    nodes.reserve(numNodes);
+    nodes.push_back( Node(preOrder.front()) );
+    Node* root = &nodes.front();
+
+    for (int i = 1; i < numNodes; ++i)
+    {
+        PushNode(nodes, root, preOrder[i]);
+    }
+
+    PostOrder(root);
+
+
+    return 0;   
+}
