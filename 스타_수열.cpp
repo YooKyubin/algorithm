@@ -22,7 +22,7 @@ int solution(std::vector<int> a) {
     for (auto& p : frequency)
     {
         int base = p.second;
-        if (p.first * 2 < answer)
+        if (p.first * 2 <= answer)
         {
             continue;
         }
