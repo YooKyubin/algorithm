@@ -17,14 +17,14 @@ int solution(std::vector<int> a) {
     {
         ++frequency[i].first;
     }
-    sort(frequency.begin(), frequency.end());
+    sort(frequency.begin(), frequency.end(), greater());
 
     for (auto& p : frequency)
     {
         int base = p.second;
         if (p.first * 2 <= answer)
         {
-            continue;
+            break;
         }
 
         int length = 0;
