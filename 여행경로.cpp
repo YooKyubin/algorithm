@@ -53,3 +53,91 @@ int main() {
     cout << endl;
     return 0;
 }
+
+
+---
+
+
+#include <string>
+#include <vector>
+#include <map>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+using FLIGHT = map<string, vector<pair<string, bool>>>;
+
+bool DFS(const string& src, const int numFlights, FLIGHT& flights, vector<string>& answer)
+{
+    if (answer.size() == numFlights + 1)
+    {
+        return true;
+    }
+    
+    for (auto& dst : flights[src])
+    {
+        if (dst.second)
+        {
+            continue;
+        }
+        
+        dst.second = true;
+        answer.push_back(dst.first);
+        if (DFS(dst.first, numFlights, flights, answer))
+        {
+            return true;
+        }
+        answer.pop_back();
+        dst.second = false;
+    }
+
+    return false;
+}
+
+vector<string> solution(vector<vector<string>> tickets) {
+    vector<string> answer;
+
+    FLIGHT flights;
+    int numFlights = tickets.size();
+
+    for (auto& ticket : tickets)
+    {
+        const string& src = ticket[0];
+        const string& dst = ticket[1];
+
+        flights[src].push_back({dst, false});
+    }
+    for (auto& flight : flights)
+    {
+        sort(flight.second.begin(), flight.second.end());
+    }
+
+    const string start = "ICN";
+    answer.push_back(start);
+    DFS(start, numFlights, flights, answer);
+
+    return answer;
+}
+
+int main()
+{
+    // 도움이 되는 반례
+        // 알파벳 순서로만 처리하면 문제가 되는 이유를 보여줌
+        // 모든 티켓을 사용하는 경우를 우선 탐색해야 함
+    vector<vector<string>> tickets = 
+    {
+        { "ICN", "JFK" },
+        { "ICN", "JFK" },
+        { "HND", "ICN" },
+        { "JFK", "HND" },
+        { "JFK", "ATL" }
+    };
+
+    for (string& str : solution(tickets))
+    {
+        cout << str << endl;
+    }
+
+    return 0;
+}
