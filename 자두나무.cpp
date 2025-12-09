@@ -1,5 +1,49 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    freopen("input.txt", "r", stdin);
+
+    cin.tie(nullptr);
+    ios_base::sync_with_stdio(false);
+
+    int t, w;
+    cin >> t >> w;
+
+    vector<int> tree(t);
+    for (int i = 0; i < t; ++i)
+    {
+        cin >> tree[i];
+        --tree[i];
+    }
+
+    vector<vector<int>> dp(t, vector<int>(w + 1));
+    for (int i = 0; i < w + 1; ++i)
+    {
+        dp[0][i] = (i % 2 == tree[0]) ? 1 : 0;
+    }
+
+    for (int i = 1 ; i < t; ++i)
+    {
+        for (int j = 0; j < w + 1; ++j)
+        {
+            dp[i][j] = max(dp[i-1][j-1], dp[i-1][j]);
+            if (j % 2 == tree[i])
+            {
+                ++dp[i][j];
+            }
+        }
+    }
+    cout << *max_element(dp.back().begin(), dp.back().end()) << endl;
+
+    return 0;
+}
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -79,3 +123,4 @@ int main()
 /*
     dpTable[몇번째 자두인지][움직인 횟수][현재 나무위치]
 */
+
