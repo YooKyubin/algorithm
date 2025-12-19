@@ -12,15 +12,10 @@ int main()
     ios_base::sync_with_stdio(false);
 
     
-    for (int i = 0; i < 10001; ++i)
+    while (true)
     {
-        if (i % 2 == 0 || i % 5 == 0)
-        {
-            continue;
-        }
-
-        int n = i;
-        
+        int n;
+        cin >> n;
         if (cin.eof())
         {
             break;
@@ -31,7 +26,7 @@ int main()
         while (true)
         {
             value = value * 10 + 1;
-            value %= n;
+            value = value % n;
             if (value == 0)
             {
                 cout << iterCnt << "\n";
