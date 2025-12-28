@@ -33,3 +33,57 @@ int main(){
     cout << table[line1.size()-1][line2.size()-1] << endl;
     return 0;
 }
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    freopen("../../input.txt", "r", stdin);
+    // freopen("../../output.txt", "w", stdout);
+
+    cin.tie(nullptr);
+    ios_base::sync_with_stdio(false);
+
+    string src, dst;
+    cin >> src;
+    cin >> dst;
+
+    // dp[i][j] = src: i, dst: j까지 있다고 가정했을 때 확인
+    vector<vector<int>> dp(src.size(), vector<int>(dst.size(), 0));
+
+    // dp init
+    dp[0][0] = src[0] == dst[0] ? 1 : 0;
+    for (size_t i = 1; i < dst.size(); ++i)
+    {
+        dp[0][i] = max(dp[0][i-1], src[0] == dst[i] ? 1 : 0);
+    }
+    for (size_t i = 1; i < src.size(); ++i)
+    {
+        dp[i][0] = max(dp[i-1][0], dst[0] == src[i] ? 1 : 0);
+    }
+
+    // dp loop
+    for (size_t i = 1; i < src.size(); ++i)
+    {
+        for (size_t j = 1; j < dst.size(); ++j)
+        {
+            if ( src[i] == dst[j] )
+            {
+                dp[i][j] = dp[i-1][j-1] + 1;
+            }
+            else
+            {
+                dp[i][j] = std::max(dp[i][j - 1], dp[i - 1][j]);
+            }
+        }
+    }
+    cout << dp[src.size() - 1][dst.size() - 1] << endl;
+
+    return 0;
+}
