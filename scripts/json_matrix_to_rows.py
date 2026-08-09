@@ -19,14 +19,18 @@ def main():
         print("A JSON array is required.", file=sys.stderr)
         return
 
-    if not matrix:
-        print()
-        return
-
-    if all(isinstance(item, list) for item in matrix):
+    if matrix and all(isinstance(item, list) for item in matrix):
         rows = matrix
+        column_count = len(rows[0]) if rows else 0
+
+        if not all(len(row) == column_count for row in rows):
+            print("All rows must have the same length.", file=sys.stderr)
+            return
+
+        print(len(rows), column_count)
     elif all(not isinstance(item, list) for item in matrix):
         rows = [matrix]
+        print(len(matrix))
     else:
         print("Do not mix arrays and values in the same array.", file=sys.stderr)
         return
