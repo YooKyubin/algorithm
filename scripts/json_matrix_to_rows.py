@@ -28,6 +28,9 @@ def main():
             return
 
         print(len(rows), column_count)
+    elif all(isinstance(item, str) for item in matrix):
+        rows = [[item] for item in matrix]
+        print(len(rows))
     elif all(not isinstance(item, list) for item in matrix):
         rows = [matrix]
         print(len(matrix))
@@ -36,7 +39,10 @@ def main():
         return
 
     for row in rows:
-        cells = (json.dumps(cell, ensure_ascii=False) for cell in row)
+        cells = (
+            cell if isinstance(cell, str) else json.dumps(cell, ensure_ascii=False)
+            for cell in row
+        )
         print(" ".join(cells))
 
 
