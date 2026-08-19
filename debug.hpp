@@ -27,16 +27,17 @@ namespace debug
 		const std::size_t comma = names.find(',');
 		const std::string_view name = Trim(names.substr(0, comma));
 
-		std::cerr << name << ": " << std::forward<T>(value);
+		std::cout << name << ": " << std::forward<T>(value);
+		// std::cerr << name << ": " << std::forward<T>(value);
 
 		if constexpr (sizeof...(Rest) > 0)
 		{
-			std::cerr << ", ";
+			std::cout << ", ";
 			Print(names.substr(comma + 1), std::forward<Rest>(rest)...);
 		}
 		else
 		{
-			std::cerr << '\n';
+			std::cout << '\n';
 		}
 	}
 }
